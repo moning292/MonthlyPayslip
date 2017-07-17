@@ -1,0 +1,35 @@
+﻿<h2>Import CSV file to calculate a payslip</h2>
+<h3 class="text-warning">@ViewBag.Message</h3>
+@using (Html.BeginForm("Calculate", "Home", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary()
+
+    <div class="form-group">
+        <input type="file" id="dataFile" name="upload" onchange="check_extension(this.value,'calculate');" />
+    </div>
+
+    <div class="form-group">
+        <input type="submit" id="calculate" value="Calculate" class="btn btn-default" disabled="disabled" />
+    </div>
+
+}
+
+<script>
+        function check_extension(filename,submitId) {
+            //var re = /\..+$/;
+            var re = /^.+(.csv|.CSV)$/;
+
+            //var ext = filename.match(re);
+            var submitEl = document.getElementById(submitId);
+            if (filename.match(re)) {
+                submitEl.disabled = false;
+                return true;
+            } else {
+                alert("Invalid file type, please select CSV file only!");
+                submitEl.disabled = true;
+
+                return false;
+            }
+        }
+</script>

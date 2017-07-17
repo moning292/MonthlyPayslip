@@ -1,0 +1,63 @@
+﻿@model List<MonthlyPayslip.Models.Payslip>
+
+@using System.Data;
+@using MonthlyPayslip.Models;
+
+@{
+    ViewBag.Title = "Result";
+}
+
+<h2>Employee Monthly Payslip Result</h2>
+    @if (Model != null)
+    {
+<table>
+    <thead>
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Pay Period</th>
+            <th>Gross Income</th>
+            <th>Income Tax</th>
+            <th>Net Income</th>
+            <th>Super</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Payslip ppp in Model as List<Payslip>)
+        {
+            <tr>
+                <td>@ppp.FirstName</td>
+                <td>@ppp.LastName</td>
+                <td>@ppp.PayPeriod</td>
+                <td>@ppp.GrossIncome</td>
+                <td>@ppp.IncomeTax</td>
+                <td>@ppp.NetIncome</td>
+                <td>@ppp.Super</td>
+            </tr>
+        }
+    </tbody>
+</table>
+        <h2><input type="button" title="Export to CSV File" value="Export to CSV File" class="btn btn-default" onclick="location.href='@Url.Action("ExportCSV", "Home")'" /></h2>
+    }
+    else
+    {
+        <h2>ERROR! No result found</h2>
+    }
+
+<style>
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+
+    tr:nth-child(even) {
+        background-color: #dddddd;
+    }
+</style>
