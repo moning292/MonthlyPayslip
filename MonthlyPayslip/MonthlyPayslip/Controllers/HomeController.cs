@@ -25,7 +25,7 @@ namespace MonthlyPayslip.Controllers
 
         public ActionResult Contact()
         {
-            ViewBag.Message = "Please feel free to contact me at...";
+            ViewBag.Message = "Please feel free to contact...";
 
             return View();
         }

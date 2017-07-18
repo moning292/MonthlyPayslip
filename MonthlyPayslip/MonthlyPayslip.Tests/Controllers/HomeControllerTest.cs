@@ -148,6 +148,82 @@ namespace MonthlyPayslip.Tests.Controllers
         }
 
         [TestMethod]
+        public void Calculate_NegativeIncomeCSV()
+        {
+            var fileData = UTF8Encoding.UTF8.GetBytes("Mark,Overmars,-999999,9%,01 March - 31 March");
+            var fileStream = new MemoryStream(fileData);
+
+            var fileToUpload = new Mock<HttpPostedFileBase>();
+            fileToUpload.Setup(f => f.ContentLength).Returns((int)fileStream.Length);
+            fileToUpload.Setup(f => f.FileName).Returns("test.csv");
+            fileToUpload.Setup(f => f.ContentType).Returns("csv");
+            fileToUpload.Setup(f => f.InputStream).Returns(fileStream);
+
+            HomeController controller = new HomeController();
+            var result = controller.Calculate(fileToUpload.Object) as ViewResult;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Incorrect data format in the CSV File. Check the data again!", result.ViewBag.Message);
+        }
+
+        [TestMethod]
+        public void Calculate_WithNoPercentSignCSV()
+        {
+            var fileData = UTF8Encoding.UTF8.GetBytes("Mark,Overmars,80005,13.5,01 March - 31 March");
+            var fileStream = new MemoryStream(fileData);
+
+            var fileToUpload = new Mock<HttpPostedFileBase>();
+            fileToUpload.Setup(f => f.ContentLength).Returns((int)fileStream.Length);
+            fileToUpload.Setup(f => f.FileName).Returns("test.csv");
+            fileToUpload.Setup(f => f.ContentType).Returns("csv");
+            fileToUpload.Setup(f => f.InputStream).Returns(fileStream);
+
+            HomeController controller = new HomeController();
+            var result = controller.Calculate(fileToUpload.Object) as ViewResult;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Incorrect data format in the CSV File. Check the data again!", result.ViewBag.Message);
+        }
+
+        [TestMethod]
+        public void Calculate_WithNegativePercentSignCSV()
+        {
+            var fileData = UTF8Encoding.UTF8.GetBytes("Mark,Overmars,80005,-12%,01 March - 31 March");
+            var fileStream = new MemoryStream(fileData);
+
+            var fileToUpload = new Mock<HttpPostedFileBase>();
+            fileToUpload.Setup(f => f.ContentLength).Returns((int)fileStream.Length);
+            fileToUpload.Setup(f => f.FileName).Returns("test.csv");
+            fileToUpload.Setup(f => f.ContentType).Returns("csv");
+            fileToUpload.Setup(f => f.InputStream).Returns(fileStream);
+
+            HomeController controller = new HomeController();
+            var result = controller.Calculate(fileToUpload.Object) as ViewResult;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Incorrect data format in the CSV File. Check the data again!", result.ViewBag.Message);
+        }
+
+        [TestMethod]
+        public void Calculate_IncorrectDateFormatCSV()
+        {
+            var fileData = UTF8Encoding.UTF8.GetBytes("David,James,56000,8%,March 2017");
+            var fileStream = new MemoryStream(fileData);
+
+            var fileToUpload = new Mock<HttpPostedFileBase>();
+            fileToUpload.Setup(f => f.ContentLength).Returns((int)fileStream.Length);
+            fileToUpload.Setup(f => f.FileName).Returns("test.csv");
+            fileToUpload.Setup(f => f.ContentType).Returns("csv");
+            fileToUpload.Setup(f => f.InputStream).Returns(fileStream);
+
+            HomeController controller = new HomeController();
+            var result = controller.Calculate(fileToUpload.Object) as ViewResult;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual("Incorrect data format in the CSV File. Check the data again!", result.ViewBag.Message);
+        }
+
+        [TestMethod]
         public void Calculate_EmptyCSV()
         {
             var fileData = UTF8Encoding.UTF8.GetBytes("");
